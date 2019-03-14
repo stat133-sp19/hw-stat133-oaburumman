@@ -1,0 +1,44 @@
+---
+title: "Workout 1"
+author: "Omar Aburumman"
+date: "March 12, 2019"
+output: github_document
+---
+
+
+```{r, echo=FALSE}
+effective_shooting <- read.csv("../data/shots-data.csv", stringsAsFactors = FALSE)
+```
+
+```{r out.width='80%', echo=FALSE, fig.align='center'}
+knitr::include_graphics('gsw-shot-charts.png')
+```
+
+```{r, echo=FALSE}
+library(dplyr)
+three_prt <- summarise(group_by(filter(gi_df, shot_type == "3PT Field Goal"), name), total = n(), made = sum(shot_made_flag == "shot_yes"), perc_made = made/total*100)
+three_prt <- arrange(three_prt, desc(perc_made))
+three_prt
+```
+#**Warriors Continue Excellent Shooting**
+
+##Intro of the Night
+The World Champion Golden State Warriors seem to continue their excellent basketball success this season. Their amazing lineup of all stars including Steph Curry, Klay Thompson, Kevin Durant, Draymond Green, and Andre Iguodala continue their above average shooting. The entire team is shooting over 31% from the field. The backcourt of Curry and Thompson are even more impressive with 40.76 and 42.41% shooting respectively.
+
+##Overall Impression of the Season, Shooting Wise
+The best shooters take the most shots! This is definitely clear when we're discussing Warriors basketball as the backcourt of Thompson and Curry have more shots together than the entire other three starting players combined! The lowest shot attempt total and lowest made is Andre Iguodala as he is more of a defensive player than scorer. Draymond Green, another defensive player, has the lowest percentage of shot made at 31.9%. The relationship between the defenders and the backcourt when it comes to shot percentage seems clearer. The smaller players like Steph and Klay shoot more and make more high percentage shots.
+
+##Shot Distances Analysis
+They call the Warriors backcourt of Steph and Klay, the Splash Brothers because of the amount of 3's they make. If looking at the shot chart, the amount of green dots behind the 3-point line are the most for those three players. Of course the green dots indicate the shots made while red is a miss. Notice how little attempts Iguodala and Green have compared to the other 3. It's also very interesting to note Kevin Durant has a huge cluster of green dots right around the basket. It's very likely that he is using his near 7 foot size to impose his will in the paint to score some very well needed buckets. Dubbed as the "snake", Kevin Durant is said to be one of the most NBA superstar who likes to take it easy. The closer rim shots are a good indicator.
+![](C:/Users/Omar Aburumman/Desktop/hw-stat133/Workout1/images/gsw-shot-charts.png)
+
+
+##Playing Minutes
+
+The best player on the Warriors and NBA Finals MVP, Kevin Durant, so we would expect him to average the most minutes on the team. This is certainly true. He is one of the highest playing minutes players.
+
+#Overall Impressions of the Warriors Season
+Another successful Warriors season ends with another championship and a Kevin Durant Finals MVP. I think the data presented supports the idea that the GSW Warriors have revolutionized the game of basketball with their amazing shooting. The amount of 3's that Steph Curry, Klay Thompson, and Kevin Durant make are the reason why they are the most successful and hardest teams to defend in the NBA. It's one of the reasons why every other team now values 3 point shooting and long distance shots in their personnel. We should be proud of our local hometown Warriors!
+
+
+
