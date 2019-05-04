@@ -1,0 +1,152 @@
+---
+title: "Binomial Package"
+author: "Omar Aburumman"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to the Binomial Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(binomial)
+```
+
+## Binomial
+
+The package binomial is a package which attempts to give a statistics summary, graph, and probabilities regarding the binomial formula. This package will allow the user to visualize how a binomial distribution evolves over a course of multiple trials. The probability of a certain amount of desired successes occurring in a fixed amount of trials with binary choices are the constraints toward working with the binomial distribution. This is an important disclaimer
+
+
+## Checking whether your parameters are valid`
+
+The first step is to check if your parameters of trials, prob, and success are valid`:
+
+```{r}
+check_prob <- function(prob){
+
+  if (prob > 1 | prob < 0 | length(prob)>1){
+    stop("p has to be a number in between 0 and 1, only one value as well")
+  } 
+    return(TRUE)
+}
+
+check_trials <- function(trials){
+  if (trials >0 && trials%%1 == 0){
+    return(TRUE)}
+  else{
+    stop("invalid trial numbers") }
+}
+
+check_success <- function(success, trials){
+  for (i in 1:length(trials)){
+    if (success[i] < 0 || success[i] > trials){
+      stop("invalid success value")}
+
+    else if (success[i] >= 0 && success[i]<= trials)
+      return(TRUE)}
+}
+
+```
+
+Prob must return a length of 1 with a value  in between 0 and 1
+Trials must be an integer with a value greater than 0
+Success can be a vector of greater than length 1 but cannot be greater than trials or a negative value.
+
+
+
+## Descriptive Statistics for the Binomial Package
+
+Once you have checked for trials, probability, and success; you can find 5 key descriptive statistics with this file. These measures are mean, variance, mode, skewness, and kurtosis. This is done by creating auxillary functions which will be called into other main functions:
+
+```{r}
+aux_mean <- function(trials, prob){
+
+  bin_aux_mean = trials*prob
+  return(bin_aux_mean)
+}
+aux_variance <- function(trials, prob){
+  bin_aux_variance = trials*prob*(1-prob)
+  return(bin_aux_variance)
+}
+
+aux_mode <- function(trials, prob) {
+  binomial_aux_mode = trials*prob + prob
+
+  if (binomial_aux_mode%%1 == 0) {
+    odd_mode = c(binomial_aux_mode, binomial_aux_mode-1)
+    return(odd_mode)}
+
+  else{
+    return(trials*prob + prob)
+  }
+}
+
+aux_skewness <- function(trials, prob){
+  bin_aux_skewness = (1-2*prob)/sqrt(trials*prob*(1-prob))
+  return(bin_aux_skewness)
+}
+
+aux_kurtosis <- function(trials, prob){
+  bin_aux_kurt = (1-6*prob*(1-prob))/(trials*prob*(1-prob))
+  return(bin_aux_kurt)
+}
+
+```
+
+The `summary()` function gives you a nice list of these values:
+```{r}
+summary.binvar <- function(binvar){
+  summary_bin <- list(
+    trials <- binvar$trials,
+    prob <- binvar$prob,
+    mean <- aux_mean(binvar$trials, binvar$prob),
+    variance <- aux_variance(binvar$trials, binvar$prob),
+    mode <- aux_mode(binvar$trials, binvar$prob),
+    skewness <- aux_skewness(binvar$trials, binvar$prob),
+    kurtosis <- aux_kurtosis(binvar$trials, binvar$prob)
+  )
+  class(summary_bin) = "summary_bin"
+  summary_bin
+}
+```
+
+
+## Plot of relative frequencies
+
+You can use the function `plot()` or the library ggplot2 package to illustrate a bar graph of distributions for successes over the course of recorded trials:
+
+```{r, fig.show='hold'}
+plot.bindis <- function(bin_dataframe){
+  ggplot(data = bin_dataframe, aes(x=success, y=probability)) + geom_bar(stat= "identity")
+}
+```
+
+This can also be done if the user wants a line graph of the CDF of the function. Cumulative Distribution Function that aggregates the probabilities.
+
+```{r}
+plot.bincum<-function(bincum_dataframe){
+  ggplot(data = bincum_dataframe, aes(x=success, y=cumulative)) + geom_line() +
+    scale_y_continuous(limits = c(0,1)) + geom_point() + ylab("Probability")
+}
+```
+
+Important to note that these plots and list are generated after creating the dataframe that is tracking these specific probabilities throughout thr trials as the experiment goes on. These data frames are created such as the example below:
+
+```{r}
+bin_cumulative <- function(trials, prob){
+  success <- c(0:trials)
+  probability <- c(bin_choose(trials, 0:trials)*((prob)^(0:trials))* (1-prob)^(trials-(0:trials)))
+  bin_dataframe <- data.frame(bin_probability(success, trials, prob))
+  for (i in 0:success){
+    cumulative = cumsum(probability)
+  }
+  bincum_dataframe <- cbind(success, probability, cumulative)
+  bincum_dataframe <- data.frame(bincum_dataframe)
+  class(bincum_dataframe) = c("bincum", "data.frame")
+  bincum_dataframe
+}
+
+```
+
