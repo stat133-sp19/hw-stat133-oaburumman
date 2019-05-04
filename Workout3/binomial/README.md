@@ -13,10 +13,13 @@ package. To use this particular distribution keep in mind these constraints must
 *Success must be binary, only two options (fail or succeed)
 *Each trial is independent of the other
 *Constant probability (p, iid)
+*Fixed Trials from 1 to n
 
->Main Parameters: prob, success, trials
->Class Types in Package: closure, numeric, data.frame, list, bincum, binvar, summary.binvar
->Functions: 
+Main Parameters: prob, success, trials
+
+Class Types in Package: closure, numeric, data.frame, list, bincum, binvar, summary.binvar
+
+Functions: 
 check_prob()
 – check_trials()
 – check_success()
