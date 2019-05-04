@@ -24,11 +24,11 @@ check_prob()
 – check_trials()
 – check_success()
 • Context for summary measures:
-– aux_mean()<br\>
-– aux_variance()<br\>
-– aux_mode()<br\>
-– aux_skewness()<br\>
-– aux_kurtosis()<br\>
+– aux_mean()
+– aux_variance()
+– aux_mode()
+– aux_skewness()
+– aux_kurtosis()
 • Context for binomial:
 – bin_choose()
 – bin_probability()
